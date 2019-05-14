@@ -1,0 +1,180 @@
+import { Scene } from "phaser";
+import constants from "../constants";
+import CountDown from "./CountDownScene";
+
+
+const WIDTH = constants.mida_tile * constants.tiles[0];
+const HEIGHT = constants.mida_tile * constants.tiles[1];
+
+class Llauna extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y) {
+        super(scene, x, y, "llauna_dianes");
+        scene.add.existing(this);
+    }
+}
+
+class Detector extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y) {
+        super(scene, x, y, "bomb");
+        this.direccio = 1;
+        this.velMax = 5;
+        this.velocitat = this.velMax;
+        this.velMin = 3;
+        this.velReduccio = 0.5;
+        scene.add.existing(this);
+    }
+}
+
+var graphics
+
+export default class MinijocDianes extends Scene {
+    constructor() {
+        super({ key: "MinijocDianes" });
+        //Creem en ordre els objectes del escenari
+        let llaunes;
+        let detector;
+        let direccio_detector = 1;
+        let linia;
+        //let graphics;
+
+
+        this.calcular_punts_linia = function(xO,yO,xF,yF,length)
+        {
+            //console.log("O: " + xO +"," +yO);
+            //console.log("F: " + xF +"," +yF);
+            var vec = [ xF - xO, yF - yO];
+            //console.log("Vec " + vec[0] +"," +vec[1]);
+            var long = Math.sqrt(vec[0]*vec[0]+vec[1]*vec[1]);
+            //console.log("Long: " + long);
+            var aux  = [vec[0]*length/long, vec[1]*length/long];
+            var aux2 = [aux[0]+xO, aux[1]+yO];
+            //console.log("Aux2: " + aux2[0] +"," + aux2[1]);
+            return aux2;
+        }
+
+        this.acabat = function(llaunes) {
+            var acabat = true;
+            var llauna = 0;
+            while (acabat && llauna < 4)
+            {
+                console.log(llauna);
+                if (llaunes[llauna].visible === true)
+                {
+                    acabat = false;
+                }
+                llauna = llauna +1;
+            }
+            return acabat;
+        }
+
+    }
+
+    create() {
+
+        constants.escena_pausada = "MinijocDianes";
+        this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
+        this.scene.pause();
+
+        //Comencem el minijoc
+        var escena = this;
+        console.log("Starting MinijocDianes ...");
+
+        let background = this.add.image(0, 0, "paisatge_dianes"); //Background
+        background.setOrigin(0, 0);
+
+        this.llaunes = [
+            new Llauna(escena, 300, HEIGHT-196),
+            new Llauna(escena, 430, HEIGHT-196),
+            new Llauna(escena, 570, HEIGHT-196),
+            new Llauna(escena, 700, HEIGHT-196)
+        ];
+
+
+        let foreground = this.add.image(WIDTH / 2, HEIGHT-80, "barra_dianes"); //Foreground
+
+        this.detector = new Detector(this,400, HEIGHT-196);
+        //this.detector.visible = false;
+
+
+        var punts = this.calcular_punts_linia(WIDTH / 2, HEIGHT, this.detector.x, this.detector.y,  150);
+
+        this.linia = new Phaser.Geom.Line(WIDTH / 2, HEIGHT, punts[0], punts[1]);
+
+        graphics = this.add.graphics({ lineStyle: { width: 6, color: 0xaa00aa } });
+
+        graphics.strokeLineShape(this.linia);
+
+        //Modifiquem la posicio del personatge1 i el seu frame durant un click de ratoli
+        this.input.on("pointerdown",
+            function(event) {
+                for (var i = 0; i < 4; i++)
+                {
+                    if (this.llaunes[i].getBounds().contains(this.detector.x, this.detector.y)) {
+                        this.llaunes[i].setTint(Math.random() * 0xffffff);
+                        this.llaunes[i].visible = false;
+                    }
+                }
+            },this);
+    }
+
+    update(time, delta) {
+
+        console.log("HOLA");
+        if (!this.acabat(this.llaunes))
+        {
+            console.log("Pos: " + this.detector.x);
+            this.detector.x += this.detector.velocitat * this.detector.direccio;
+
+            if (this.detector.x < 280 || this.detector.x > 720)
+            {
+                this.detector.direccio *= -1;
+                if (this.detector.x < 280)
+                {
+                    this.detector.x = 280;
+                }
+                else
+                {
+                    this.detector.x = 720;
+                }
+
+                if (this.detector.velocitat - this.detector.velReduccio >= this.detector.velMin)
+                {
+                    this.detector.velocitat -= this.detector.velReduccio;
+                }
+
+                console.log("Vel: " + this.detector.velocitat);
+            }
+
+            var punts = this.calcular_punts_linia(this.linia.x1, this.linia.y1, this.detector.x, this.detector.y,  150);
+
+            this.linia.setTo(this.linia.x1, this.linia.y1, punts[0], punts[1]);
+            graphics.clear();
+            graphics.strokeLineShape(this.linia);
+        }
+        else
+        {
+
+        }
+
+    }
+}
+
+function onEvent() {
+
+}
+
+
+function acabat(llaunes) {
+    var acabat = true;
+    var llauna = 0;
+    while (acabat && llauna < 4)
+    {
+        console.log(llauna);
+        if (llaunes[llauna].visible === true)
+        {
+            acabat = false;
+        }
+        llauna = llauna +1;
+    }
+    return acabat;
+}
