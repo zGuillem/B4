@@ -4,6 +4,7 @@ import PlayScene from './scenes/PlayScene'
 import MinijocBeure from './scenes/MinijocBeure'
 import CountDown from './scenes/CountDownScene'
 import MinijocDianes from './scenes/MinijocDianes'
+import MinijocDones from './scenes/MinijocDones'
 import constants from './constants'
 
 function launch() {
@@ -19,7 +20,7 @@ function launch() {
                 debug: false
             }
         },
-        scene: [BootScene, PlayScene, MinijocBeure, CountDown, MinijocDianes]
+        scene: [BootScene, PlayScene, MinijocBeure, CountDown, MinijocDianes, MinijocDones]
     })
 }
 

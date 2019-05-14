@@ -12,6 +12,8 @@ class Dona extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.velocitat = Phaser.Math.Between(5, 7);
         scene.add.existing(this);
+
+        //Funcions
     }
 }
 
@@ -21,10 +23,21 @@ class Diana extends Phaser.GameObjects.Sprite {
         this.scene = scene;
         this.velocitat = Phaser.Math.Between(5, 7);
         scene.add.existing(this);
+
+        //Funcions
     }
 }
 
-export default class MinjocDones extends Scene {
+class Cursor extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y) {
+        super(scene, x, y, "dones_cursor");
+        scene.add.existing(this);
+
+        //Funcions
+    }
+}
+
+export default class MinijocDones extends Scene {
 
     constructor() {
         super({key: "MinijocDones"});
@@ -32,9 +45,28 @@ export default class MinjocDones extends Scene {
         this.nDones = 0;
         this.dianes = [];
         this.nDianes = 0;
-        this.scene = NULL;
 
         //Funciones
+        this.crearDona = function (escena, x, y)
+        {
+          var dona = new Dona(escena, x, y);
+          dona.setInteractive().on('pointerdown',function(event)
+          {
+            console.log("CLICKAT");
+          });
+          return dona;
+        };
+
+        this.crearDiana = function (escena, x, y)
+        {
+            let diana = new Diana(escena, x, y);
+            diana.setInteractive().on('pointerdown',function(event)
+            {
+                console.log("CLICKAT");
+            });
+            return diana;
+        };
+
         this.actualitzarDones = function()
         {
             var donesEliminar = [];
@@ -46,7 +78,7 @@ export default class MinjocDones extends Scene {
                     donesEliminar.push(this.dones[i]);
                 }
             }
-            for (var j in donesEliminar)
+            for (let j in donesEliminar)
             {
                 j.destroy();
                 this.nDones--;
@@ -72,20 +104,25 @@ export default class MinjocDones extends Scene {
     }
 
     create() {
-        constants.escena_pausada = "MinijocDianes";
+        /*
+        constants.escena_pausada = "MinijocDones";
         this.scene.add('CountDown', CountDown, true, {x: 400, y: 300});
         this.scene.pause();
 
         //Comencem el minijoc
         console.log("Starting MinijocDones ...");
+*/
+        //this.input.setDefaultCursor('url(@/game/assets/input/Cursor.cur)', pointer);
 
-        this.dianes.push(new Diana(this,100,100));
-        this.dianes.push(new Diana(this,200,100));
-        this.dianes.push(new Diana(this,300,100));
-        this.dianes.push(new Diana(this,400,100));
+        //this.input.mouse.requestPointerLock();
 
-        var dia = new Diana(this,400,100);
+        this.dianes.push(this.crearDiana(this, 100, 100));
+        this.dianes.push(this.crearDiana(this, 200, 100));
+        this.dianes.push(this.crearDiana(this, 300, 100));
+        this.dianes.push(this.crearDiana(this, 400, 100));
 
+        this.cursor = this.add.image(0,0, "dones_cursor");
+        this.children.add(this.cursor);
 
         //let background = this.add.image(0, 0, "paisatge_dianes"); //Background
         //background.setOrigin(0, 0);
@@ -93,13 +130,33 @@ export default class MinjocDones extends Scene {
         //let foreground = this.add.image(WIDTH / 2, HEIGHT-80, "barra_dianes"); //Foreground
 
 
-        update()
-        {
+        //this.input.mouse.requestPointerLock();
 
-        }
+
+        //this.input.on('move', function (pointer) {
+            //if (this.input.mouse.locked)
+            //{
+                //this.cursor.x += pointer.movementX;
+                //this.cursor.y += pointer.movementY;
+            //}
+        //}, this);
+
     }
 
+    update()
+    {
+        this.cursor.x = this.input.x;
+        this.cursor.y = this.input.y;
+
+        this.actualitzarDianes();
+        this.actualitzarDones();
+    }
 }
 function onEvent() {
+
+}
+
+function clickat (event, objecte){
+    console.log("Clickat");
 
 }

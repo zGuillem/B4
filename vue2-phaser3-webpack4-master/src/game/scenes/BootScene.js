@@ -20,6 +20,7 @@ import llauna from '@/game/assets/llauna.png';
 
 //Dones
 import dona_corrent from '@/game/assets/minijoc_dones_dona.png'
+import dones_cursor from '@/game/assets/minijoc_dones_cursor.png'
 
 export default class BootScene extends Scene {
     constructor() {
@@ -27,8 +28,12 @@ export default class BootScene extends Scene {
     }
 
     preload() {
+        //Debug
         this.load.image('mapa', mapa);
         this.load.image('bomb', bomb);
+        this.load.audio('thud', ['assets/thud.mp3', 'assets/thud.ogg']);
+
+        //Beure
         this.load.spritesheet('beure_jugador1', beure_jugador1, {
             frameWidth: 216,
             frameHeight: 216
@@ -49,27 +54,33 @@ export default class BootScene extends Scene {
             frameWidth: 96,
             frameHeight: 96
         });
-        this.load.spritesheet('dones_dona_corrent', dona_corrent, {
-            frameWidth: 100,
-            frameHeight: 100
-        });
-        this.load.image('barra', taberna_barra);
-        this.load.image('paisatge_dianes', paisatge_dianes);
-        this.load.image('barra_dianes', barra_dianes);
-        this.load.image('llauna_dianes', llauna);
         this.load.spritesheet('beure_j1_cara', beure_j1_cara, {
             frameWidth: 34,
             frameHeight: 40
         });
+        this.load.image('barra', taberna_barra);
+        this.load.image('taberna_beure', taberna_minijoc);
+
+        //Diana
+        this.load.image('paisatge_dianes', paisatge_dianes);
+        this.load.image('barra_dianes', barra_dianes);
+        this.load.image('llauna_dianes', llauna);
+
+        //Dones
+        this.load.spritesheet('dones_dona_corrent', dona_corrent, {
+            frameWidth: 100,
+            frameHeight: 100
+        });
+        this.load.image('dones_cursor', dones_cursor);
+
+        //CountDown
         this.load.spritesheet('ReadyGo', ready_go, {
             frameWidth: 100,
             frameHeight: 100
         });
-        this.load.image('taberna_beure', taberna_minijoc);
-        this.load.audio('thud', ['assets/thud.mp3', 'assets/thud.ogg']);
     }
 
     create() {
-        this.scene.start('MinijocDones');
+        this.scene.start('MinijocDianes');
     }
 }
