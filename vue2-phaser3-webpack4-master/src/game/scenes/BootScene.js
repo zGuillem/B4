@@ -81,8 +81,8 @@ export default class BootScene extends Scene {
 
         //CountDown
         this.load.spritesheet('ReadyGo', ready_go, {
-            frameWidth: 100,
-            frameHeight: 100
+            frameWidth: 420,
+            frameHeight: 384
         });
         this.load.spritesheet('nombres', nombres,
         {

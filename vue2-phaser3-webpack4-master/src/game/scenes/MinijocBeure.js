@@ -71,11 +71,11 @@ export default class MinijocBeure extends Scene {
           }
         }, this);
 
-    let background = this.add.image(0, 0, "taberna_beure"); //Background
+    let background = this.add.image(-100, 0, "taberna_beure"); //Background
     background.setOrigin(0, 0);
 
-    this.personatge1 = new Personaje(this, 300, 300, 1);
-    this.personatge2 = new Personaje(this, 400, 300, 2);
+    this.personatge1 = new Personaje(this, 600, 401, 1);
+    this.personatge2 = new Personaje(this, 700, 401, 2);
 
     constants.escena_pausada = "MinijocBeure";
     this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
@@ -88,7 +88,7 @@ export default class MinijocBeure extends Scene {
       delay: 1000,
       callback: onEvent,
       callbackScope: this,
-      repeat: 5
+      repeat: -1
     });
 
    //Creem la configuració per les animacions
@@ -170,6 +170,9 @@ function canviarParticules(personatge)
   }
   else if(personatge.frame_actual === 2 && personatge.frame_anterior === 4 ) {
     personatge.particules.setTexture("beure_particules1");
+    personatge.particules.play("anim_particules1");
+  }
+  else if(personatge.frame_actual === 0 && personatge.frame_anterior === 2 ) {
     personatge.particules.play("anim_particules1");
   }
 }

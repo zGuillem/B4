@@ -1,6 +1,8 @@
 import { Scene } from 'phaser';
 import constants from '../constants';
 
+const WIDTH = constants.mida_tile * constants.tiles[0];
+const HEIGHT = constants.mida_tile * constants.tiles[1];
 
 export default class CountDown extends Scene {
     constructor () {
@@ -10,10 +12,10 @@ export default class CountDown extends Scene {
     create () {
         console.log("Starting CountDown...");
 
-        var Countdown = this.add.sprite(200,200, 'ReadyGo');
+        var Countdown = this.add.sprite(WIDTH/2,HEIGHT/2, 'ReadyGo');
 
         var time = this.time.addEvent({
-            delay: 1000,
+            delay: 500,
             callback: onEvent,
             callbackScope: this,
             repeat: 9,
