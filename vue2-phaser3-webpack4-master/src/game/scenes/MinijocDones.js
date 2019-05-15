@@ -8,7 +8,7 @@ const HEIGHT = constants.mida_tile * constants.tiles[1];
 
 class Dona extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, "llauna_dianes");
+        super(scene, x, y, "dones_dona_corrent");
         this.scene = scene;
         this.velocitat = Phaser.Math.Between(5, 7);
         scene.add.existing(this);
@@ -121,25 +121,29 @@ export default class MinijocDones extends Scene {
         this.dianes.push(this.crearDiana(this, 300, 100));
         this.dianes.push(this.crearDiana(this, 400, 100));
 
+        this.dones.push(this.crearDona(this, 100, 200));
+        this.dones.push(this.crearDona(this, 200, 200));
+
         this.cursor = this.add.image(0,0, "dones_cursor");
         this.children.add(this.cursor);
 
+        var prova = this.add.sprite(500, 500, "dones_dona_corrent");
+
+        this.anims.create({
+            key: "anim_dona",
+            frames: this.anims.generateFrameNumbers("dones_dona_corrent"),
+            frameRate: 1,
+            repeat:-1
+        });
+
+        prova.play("anim_dona");
+        this.dones[0].play("anim_dona");
         //let background = this.add.image(0, 0, "paisatge_dianes"); //Background
         //background.setOrigin(0, 0);
 
         //let foreground = this.add.image(WIDTH / 2, HEIGHT-80, "barra_dianes"); //Foreground
 
 
-        //this.input.mouse.requestPointerLock();
-
-
-        //this.input.on('move', function (pointer) {
-            //if (this.input.mouse.locked)
-            //{
-                //this.cursor.x += pointer.movementX;
-                //this.cursor.y += pointer.movementY;
-            //}
-        //}, this);
 
     }
 

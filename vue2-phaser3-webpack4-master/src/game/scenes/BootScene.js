@@ -81,6 +81,6 @@ export default class BootScene extends Scene {
     }
 
     create() {
-        this.scene.start('MinijocDianes');
+        this.scene.start('MinijocBeure');
     }
 }
