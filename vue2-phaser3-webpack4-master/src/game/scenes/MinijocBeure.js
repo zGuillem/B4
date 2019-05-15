@@ -85,6 +85,8 @@ export default class MinijocBeure extends Scene {
     this.timer_nombres = this.add.sprite(900, 200, "nombres", 5);
     this.children.add(this.timer_nombres);
 
+
+
     var timer = this.time.addEvent({
       delay: 1000,
       callback: onEvent,
@@ -112,14 +114,6 @@ export default class MinijocBeure extends Scene {
    //this.add.image(0, 0, 'beure_j1_cara', '__BASE').setOrigin(0);
 
     //Modifiquem la posicio del personatge1 i el seu frame durant un click de ratoli
-    this.input.on(
-      "pointerdown",
-      function(event) {
-        this.personatge1.actual += this.personatge1.alcohol;
-        console.log(this.personatge1.actual);
-      },
-      this
-    );
   }
 
   update(time) {
@@ -132,6 +126,7 @@ var comptador = 1;
 
 function onEvent() {
   this.timer_nombres.setFrame(5-comptador);
+  this.timer_nombres.setTint(Math.random()  *0xffffff);
   if (comptador < 5) {
     console.log(comptador);
     comptador += 1;

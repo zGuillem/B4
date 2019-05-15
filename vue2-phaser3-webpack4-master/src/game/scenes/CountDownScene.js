@@ -15,7 +15,7 @@ export default class CountDown extends Scene {
         var Countdown = this.add.sprite(WIDTH/2,HEIGHT/2, 'ReadyGo');
 
         var time = this.time.addEvent({
-            delay: 500,
+            delay: 700,
             callback: onEvent,
             callbackScope: this,
             repeat: 9,
