@@ -12,6 +12,7 @@ import taberna_minijoc from '@/game/assets/taberna_minijoc_beure.png';
 import taberna_barra from '@/game/assets/barra_taberna.png';
 import ready_go from '@/game/assets/ready_go.png';
 import beure_particules_1 from  '@/game/assets/beber_particulas_nivel_embriaguez_1.png';
+import beure_particules_2 from  '@/game/assets/beber_particulas_nivel_embriaguez_2.png';
 
 //Dianes
 import paisatge_dianes from '@/game/assets/Fons_llaunes.png';
@@ -21,6 +22,10 @@ import llauna from '@/game/assets/llauna.png';
 //Dones
 import dona_corrent from '@/game/assets/minijoc_dones_dona.png'
 import dones_cursor from '@/game/assets/minijoc_dones_cursor.png'
+
+//General
+import nombres from '@/game/assets/sprite_numeros_grandes.png'
+
 
 export default class BootScene extends Scene {
     constructor() {
@@ -51,15 +56,16 @@ export default class BootScene extends Scene {
             frameHeight: 216
         });
         this.load.spritesheet('beure_particules1', beure_particules_1, {
-            frameWidth: 96,
-            frameHeight: 96
+            frameWidth: 120,
+            frameHeight: 120
         });
-        this.load.spritesheet('beure_j1_cara', beure_j1_cara, {
-            frameWidth: 34,
-            frameHeight: 40
+        this.load.spritesheet('beure_particules2', beure_particules_2, {
+            frameWidth: 120,
+            frameHeight: 120
         });
         this.load.image('barra', taberna_barra);
         this.load.image('taberna_beure', taberna_minijoc);
+
 
         //Diana
         this.load.image('paisatge_dianes', paisatge_dianes);
@@ -78,6 +84,11 @@ export default class BootScene extends Scene {
             frameWidth: 100,
             frameHeight: 100
         });
+        this.load.spritesheet('nombres', nombres,
+        {
+            frameWidth: 192,
+            frameHeight: 192
+        })
     }
 
     create() {
