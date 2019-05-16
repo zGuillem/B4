@@ -6,6 +6,8 @@ import CountDown from "./CountDownScene";
 const WIDTH = constants.mida_tile * constants.tiles[0];
 const HEIGHT = constants.mida_tile * constants.tiles[1];
 
+var emitter = new Phaser.Events.EventEmitter();
+
 class Llauna extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, "llauna_dianes");
@@ -25,9 +27,14 @@ class Detector extends Phaser.GameObjects.Sprite {
     }
 }
 
-var graphics
+var graphics;
 
 export default class MinijocDianes extends Scene {
+    init(data){
+        this.jugador = data[0];
+        this.torns = data[1];
+    }
+
     constructor() {
         super({ key: "MinijocDianes" });
         //Creem en ordre els objectes del escenari
@@ -35,6 +42,7 @@ export default class MinijocDianes extends Scene {
         let detector;
         let direccio_detector = 1;
         let linia;
+        let escena_pare;
         //let graphics;
 
 
@@ -57,7 +65,6 @@ export default class MinijocDianes extends Scene {
             var llauna = 0;
             while (acabat && llauna < 4)
             {
-                console.log(llauna);
                 if (llaunes[llauna].visible === true)
                 {
                     acabat = false;
@@ -65,15 +72,12 @@ export default class MinijocDianes extends Scene {
                 llauna = llauna +1;
             }
             return acabat;
-        }
-
+        };
     }
 
     create() {
 
-        constants.escena_pausada = "MinijocDianes";
-        this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
-        this.scene.pause();
+        this.scene.bringToTop();
 
         //Comencem el minijoc
         var escena = this;
@@ -93,7 +97,7 @@ export default class MinijocDianes extends Scene {
         let foreground = this.add.image(WIDTH / 2, HEIGHT-80, "barra_dianes"); //Foreground
 
         this.detector = new Detector(this,400, HEIGHT-196);
-        //this.detector.visible = false;
+        this.detector.visible = false;
 
 
         var punts = this.calcular_punts_linia(WIDTH / 2, HEIGHT, this.detector.x, this.detector.y,  150);
@@ -115,14 +119,19 @@ export default class MinijocDianes extends Scene {
                     }
                 }
             },this);
+
+        constants.escena_pausada = "MinijocDianes";
+        //this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
+        this.scene.launch('CountDown');
+        this.scene.pause();
+
     }
+
 
     update(time, delta) {
 
-        console.log("HOLA");
         if (!this.acabat(this.llaunes))
         {
-            console.log("Pos: " + this.detector.x);
             this.detector.x += this.detector.velocitat * this.detector.direccio;
 
             if (this.detector.x < 280 || this.detector.x > 720)
@@ -141,8 +150,6 @@ export default class MinijocDianes extends Scene {
                 {
                     this.detector.velocitat -= this.detector.velReduccio;
                 }
-
-                console.log("Vel: " + this.detector.velocitat);
             }
 
             var punts = this.calcular_punts_linia(this.linia.x1, this.linia.y1, this.detector.x, this.detector.y,  150);
@@ -153,9 +160,19 @@ export default class MinijocDianes extends Scene {
         }
         else
         {
-
+            constants.puntuacio[this.jugador] = 100 - Math.floor(time);
+            constants.estat = "lliure";
+            this.scene.stop();
+            if (this.jugador < this.torns)
+            {
+                this.jugador++;
+                this.scene.launch('MinijocDianes');
+            }
+            else
+            {
+                console.log("Tornem a l'escena");
+            }
         }
-
     }
 }
 
@@ -178,3 +195,4 @@ function acabat(llaunes) {
     }
     return acabat;
 }
+

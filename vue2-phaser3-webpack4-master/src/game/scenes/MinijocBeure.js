@@ -74,9 +74,8 @@ export default class MinijocBeure extends Scene {
     let background = this.add.image(-100, 0, "taberna_beure"); //Background
     background.setOrigin(0, 0);
 
-    this.personatge2 = new Personaje(this, 700, 401, 2);
-    this.personatge1 = new Personaje(this, 600, 401, 1);
-
+    this.personatge2 = new Personaje(this, 700, 371, 2);
+    this.personatge1 = new Personaje(this, 600, 371, 1);
 
     constants.escena_pausada = "MinijocBeure";
     this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });

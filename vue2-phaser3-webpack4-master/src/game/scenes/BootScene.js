@@ -2,6 +2,50 @@ import {Scene} from 'phaser'
 import mapa from '@/game/assets/Mapa.png';
 import bomb from '@/game/assets/bomb.png';
 
+//Tauler
+import dorso from '@/game/assets/dorso.png';
+import mesa from '@/game/assets/mesa.png'
+import rojo from '@/game/assets/rojo.png';
+import verde from '@/game/assets/verde.png';
+import forja from '@/game/assets/fotoForja.png';
+import edifici from '@/game/assets/fotoEdificio.png';
+import minijoc from '@/game/assets/fotoMinijuego.png';
+import botonMover from '@/game/assets/botonMover.png';
+import botonDisparar from '@/game/assets/botonDisparar.png';
+import botonCartas from '@/game/assets/botonCartas.png';
+import botonMenu from '@/game/assets/menu.png';
+import botonExit from '@/game/assets/exit.png';
+import botonForja from '@/game/assets/botonForja.png';
+import botonStart from '@/game/assets/start.png';
+import botonManual from '@/game/assets/manual.png';
+import botonCreditos from '@/game/assets/creditos.png';
+import butoFiTorn from '@/game/assets/fiTorn.png';
+import player from '@/game/assets/player.png';
+import player2 from '@/game/assets/player2.png';
+import player3 from '@/game/assets/player3.png';
+import player4 from '@/game/assets/player4.png';
+import mask from '@/game/assets/mascara.png';
+import credits from '@/game/assets/credits.png';
+import mMove from  '@/game/assets/mMove.png';
+import mDisparar from '@/game/assets/mDisparar.png';
+import mComprar from '@/game/assets/mComprar.png';
+import mForjar from '@/game/assets/mForjar.png';
+import mMinijuegos from '@/game/assets/mMinijuegos.png';
+import mOtros from '@/game/assets/mOtros.png';
+import flecha from '@/game/assets/flecha.png';
+import fondoForja from '@/game/assets/fonsForja.jpg';
+import arma from '@/game/assets/arma.png';
+import municion from '@/game/assets/municion.png';
+import carta1 from '@/game/assets/carta1.png';
+import carta2 from '@/game/assets/carta2.png';
+import carta3 from '@/game/assets/carta3.png';
+import carta4 from '@/game/assets/carta4.png';
+import carta5 from '@/game/assets/carta5.png';
+import carta6 from '@/game/assets/carta6.png';
+import carta7 from '@/game/assets/carta7.png';
+import carta8 from '@/game/assets/carta8.png';
+
+
 //Beure
 import beure_jugador1 from '@/game/assets/beure_jugador1.png';
 import beure_jugador2 from '@/game/assets/beure_jugador2.png';
@@ -37,6 +81,64 @@ export default class BootScene extends Scene {
         this.load.image('mapa', mapa);
         this.load.image('bomb', bomb);
         this.load.audio('thud', ['assets/thud.mp3', 'assets/thud.ogg']);
+
+        //Tablero
+        this.load.image('rojo', rojo);
+        this.load.image('verde', verde);
+        this.load.image('forja', forja);
+        this.load.image('edifici', edifici);
+        this.load.image('minijoc', minijoc);
+
+        //Jugadores
+        this.load.image('player', player);
+        this.load.image('player2', player2);
+        this.load.image('player3', player3);
+        this.load.image('player4', player4);
+
+        // Botones
+        this.load.image('botonMenu', botonMenu);
+        this.load.spritesheet('botonExit', botonExit, {frameWidth: 200, frameHeight: 50});
+        this.load.spritesheet('botonMover', botonMover, {frameWidth: 200, frameHeight: 50});
+        this.load.spritesheet('botonDisparar', botonDisparar, {frameWidth: 200, frameHeight: 50});
+        this.load.spritesheet('botonCartas', botonCartas, {frameWidth: 200, frameHeight: 50});
+        this.load.spritesheet('botonForja', botonForja, {frameWidth: 200, frameHeight: 50});
+        this.load.image('botonStart', botonStart);
+        this.load.image('botonManual', botonManual);
+        this.load.image('botonCreditos', botonCreditos);
+        this.load.spritesheet('butoFiTorn', butoFiTorn, {frameWidth: 100, frameHeight: 100});
+
+        // Cartas
+        this.load.image('carta1', carta1);
+        this.load.image('carta2', carta2);
+        this.load.image('carta3', carta3);
+        this.load.image('carta4', carta4);
+        this.load.image('carta5', carta5);
+        this.load.image('carta6', carta6);
+        this.load.image('carta7', carta7);
+        this.load.image('carta8', carta8);
+
+        // How to play
+        this.load.image('mMover', mMove);
+        this.load.image('mDisparar', mDisparar);
+        this.load.image('mComprar', mComprar);
+        this.load.image('mForjar', mForjar);
+        this.load.image('mMinijuegos', mMinijuegos);
+        this.load.image('mOtros', mOtros);
+
+        // Flechas
+        this.load.image('flecha', flecha);
+
+        this.load.image('mask', mask);
+        this.load.image('credits', credits);
+        this.load.image('mesa', mesa);
+        this.load.spritesheet('casilla', verde, { frameWidth: 100, frameHeight: 100 });
+        this.load.spritesheet('dorso', dorso, { frameWidth: 150, frameHeight: 250 });
+
+        //Forja
+        this.load.image('fondoForja', fondoForja);
+        this.load.image('arma', arma);
+        this.load.image('municion', municion);
+        // this.load.audio('thud', ['assets/thud.mp3', 'assets/thud.ogg'])
 
         //Beure
         this.load.spritesheet('beure_jugador1', beure_jugador1, {
@@ -92,6 +194,6 @@ export default class BootScene extends Scene {
     }
 
     create() {
-        this.scene.start('MinijocBeure');
+        this.scene.start('MainScene');
     }
 }
