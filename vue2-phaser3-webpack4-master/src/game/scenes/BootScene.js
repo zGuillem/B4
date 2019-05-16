@@ -194,6 +194,6 @@ export default class BootScene extends Scene {
     }
 
     create() {
-        this.scene.start('MainScene');
+        this.scene.start('MinijocDones');
     }
 }

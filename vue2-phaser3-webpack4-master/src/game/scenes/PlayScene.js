@@ -33,25 +33,8 @@ function teEnemicAProp(jugador){
   // falta implementar, RECURSIVIDAD
 }
 
-function recompensar(guanyador)
-{
-    let jugadors = constants.players.getChildren();
-    jugadors[guanyador].plom += constants.plomo_recompensa;
-}
 
-function guanyador(){
-    var guanyador = 0;
-    var puntuacio = 0;
-    for ( var i = 1;  i < 5; i++)
-    {
-        if (constants.puntuacio[i] > puntuacio)
-        {
-            guanyador = i;
-            puntuacio = constants.puntuacio[i];
-        }
-    }
-    return guanyador;
-}
+
 
 function pausar_escenes() {
     console.log("Pausar");
@@ -79,6 +62,7 @@ export default class PlayScene extends Scene {
 
     //VARIABLES
     that = this;
+    constants.playScene = this;
     let grid; //fons taulell
     let masks = this.add.group(); //guarda les posicions on ens podem moure
     constants.potMoure = true; //cert si el botó fa quelcom al premer sobre ell
@@ -258,39 +242,11 @@ export default class PlayScene extends Scene {
             if (collisionen(jugador.x, jugador.y, constants.minijocs)) {
                 let joc = Phaser.Math.RND.between(0, 2);
                 if (joc === 0) {
-                    tractar_minijocs(1, "MinijocDianes");
-                    //recompensar(guanyador());
+                    that.scene.launch("MinijocDianes", [1, 4, []]);
                 } else if (joc === 1) {
-                    tractar_minijocs(1, "MinijocDianes");
-                    /*var i = 1;
-                    while ( i < 5 )
-                    {
-                        if (constants.estat === "lliure")
-                        {
-                            constants.estat = "ocupat";
-                            that.scene.launch('MinijocDianes');
-                            i++;
-                        }
-
-                        console.log(constants.estat);
-                    }
-                    recompensar(guanyador());
-                    */
+                    that.scene.launch("MinijocDianes", [1, 4,[]]);
                 } else if (joc === 2) {
-                    that.scene.start("MinijocDianes", );
-                    /*var i = 1;
-                    while ( i < 5 )
-                    {
-                        if (constants.estat === "lliure")
-                        {
-                            constants.estat = "ocupat";
-                            that.scene.launch('MinijocDianes');
-                            i++;
-                        }
-
-                        console.log(constants.estat);
-                    }
-                    recompensar(guanyador());*/
+                    that.scene.launch("MinijocDianes", [1, 4,[]]);
                 }
             }
           });
@@ -313,11 +269,14 @@ export default class PlayScene extends Scene {
 
 
   update () {
-      this.cursor.x = this.input.x;
-      this.cursor.y = this.input.y;
+
+    this.cursor.x = this.input.x;
+    this.cursor.y = this.input.y;
 
     let jugadors = constants.players.getChildren();
     let jugador = jugadors[constants.ronda%4];
+
+    console.log(jugador.plom);
 
     //Activació/Desactivació del botó de moure
     if (jugador.haMogut === false && constants.potMoure === true) {

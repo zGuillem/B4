@@ -1,4 +1,3 @@
-import rexWaitEvents from './plugins/waitevents.js';
 
 
 export default {
@@ -24,9 +23,7 @@ export default {
 
     //Tractar minijocs
     puntuacio: [],
-    plomo_recompensa: 5,
+    plom_recompensa: 5,
     estat: "lliure",
-
-    waitevents: this.plugins.get('rexWaitEvents').add(),
-    emitter: this.sys.events
+    playScene: undefined
 }

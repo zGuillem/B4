@@ -34,9 +34,10 @@ export default class HudScene extends Scene {
     }
 
     update () {
-        let jug = this.jugadors[constants.ronda%4];
+        this.jugadors = constants.players.getChildren();
+        this.jugador = this.jugadors[constants.ronda%4];
 
-        this.textJugador.setText("JUGADOR " + jug.torn);
+        this.textJugador.setText("JUGADOR " + this.jugador.torn);
         this.textPlom.setText("Plom: " + this.jugador.plom);
         this.textMunicio.setText("Municio: " + this.jugador.municio);
         this.textVides.setText("Vides: " + this.jugador.vides);

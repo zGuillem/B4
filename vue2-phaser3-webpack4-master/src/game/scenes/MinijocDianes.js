@@ -1,12 +1,55 @@
 import { Scene } from "phaser";
 import constants from "../constants";
 import CountDown from "./CountDownScene";
+import Personaje from "../Personatge";
 
 
 const WIDTH = constants.mida_tile * constants.tiles[0];
 const HEIGHT = constants.mida_tile * constants.tiles[1];
 
-var emitter = new Phaser.Events.EventEmitter();
+function recompensar(guanyador)
+{
+
+    let jugadores = constants.players.getChildren();
+    //console.log(jugadores);
+    jugadores[guanyador].plom += constants.plom_recompensa;
+    //console.log(jugadores[guanyador].plom);
+
+    //constants.players.clear();
+
+    for (let i = 0; i < 4; i++)
+    {
+        //constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
+        //constants.players.add(new Personaje(constants.playScene, jugadores[i].x, jugadores[i].y, 'player', jugadores[i].torn, jugadores[i].vides, jugadores[i].plom, jugadores[i].municio));
+    }
+    /*
+    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
+    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
+    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
+    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
+    */
+    //console.log(constants.players.getChildren());
+    //constants.players = jugadors;
+
+}
+
+function guanyador(puntuacio){
+    var guanyador = 0;
+    var punts = 9999;
+    for ( var i = 1;  i < 5; i++)
+    {
+
+        if (puntuacio[i] < punts)
+        {
+            guanyador = i;
+            punts = puntuacio[i];
+            console.log(punts);
+        }
+    }
+    //console.log(puntuacio);
+    //console.log(guanyador);
+    return guanyador;
+}
 
 class Llauna extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
@@ -33,6 +76,7 @@ export default class MinijocDianes extends Scene {
     init(data){
         this.jugador = data[0];
         this.torns = data[1];
+        this.puntuacions = data[2];
     }
 
     constructor() {
@@ -42,7 +86,8 @@ export default class MinijocDianes extends Scene {
         let detector;
         let direccio_detector = 1;
         let linia;
-        let escena_pare;
+        this.temps = -1;
+        this.temps_final = 0;
         //let graphics;
 
 
@@ -75,10 +120,10 @@ export default class MinijocDianes extends Scene {
         };
     }
 
-    create() {
-
+    create(time) {
         this.scene.bringToTop();
-
+        //.log(this.jugador);
+        //console.log(this.torns);
         //Comencem el minijoc
         var escena = this;
         console.log("Starting MinijocDianes ...");
@@ -124,11 +169,26 @@ export default class MinijocDianes extends Scene {
         //this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
         this.scene.launch('CountDown');
         this.scene.pause();
-
+        this.temps = 0;
     }
 
 
     update(time, delta) {
+
+        //console.log(constants.players.getChildren()[1].plom);
+
+
+        if (time > 0)
+        {
+            console.log("Temps fill de puta");
+            console.log(this.temps < 10);
+            if (this.temps < 10)
+            {
+                this.temps = time;
+                console.log("Temps actualitzat");
+            }
+        }
+
 
         if (!this.acabat(this.llaunes))
         {
@@ -160,18 +220,26 @@ export default class MinijocDianes extends Scene {
         }
         else
         {
-            constants.puntuacio[this.jugador] = 100 - Math.floor(time);
+
+            this.temps_final = time;
+            console.log(this.temps);
+            console.log(this.temps_final);
+            console.log(this.temps_final-this.temps);
+
+            this.puntuacions[this.jugador] = Math.floor(this.temps_final-this.temps);
             constants.estat = "lliure";
             this.scene.stop();
             if (this.jugador < this.torns)
             {
                 this.jugador++;
-                this.scene.launch('MinijocDianes');
+                this.scene.start('MinijocDianes',[this.jugador, this.torns, this.puntuacions]);
             }
             else
             {
+                recompensar(guanyador(this.puntuacions));
                 console.log("Tornem a l'escena");
             }
+            recompensar(guanyador(this.puntuacions));
         }
     }
 }
