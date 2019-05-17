@@ -242,11 +242,11 @@ export default class PlayScene extends Scene {
             if (collisionen(jugador.x, jugador.y, constants.minijocs)) {
                 let joc = Phaser.Math.RND.between(0, 2);
                 if (joc === 0) {
-                    that.scene.launch("MinijocDianes", [1, 4, []]);
+                    that.scene.launch("MinijocBeure", [1, 4, []]);
                 } else if (joc === 1) {
-                    that.scene.launch("MinijocDianes", [1, 4,[]]);
+                    that.scene.launch("MinijocDianes", [1, 4, []]);
                 } else if (joc === 2) {
-                    that.scene.launch("MinijocDianes", [1, 4,[]]);
+                    that.scene.launch("MinijocDones", [1, 4, []]);
                 }
             }
           });
@@ -276,7 +276,7 @@ export default class PlayScene extends Scene {
     let jugadors = constants.players.getChildren();
     let jugador = jugadors[constants.ronda%4];
 
-    console.log(jugador.plom);
+    //console.log(jugador.plom);
 
     //Activació/Desactivació del botó de moure
     if (jugador.haMogut === false && constants.potMoure === true) {

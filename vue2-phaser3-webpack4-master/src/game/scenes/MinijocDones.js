@@ -2,15 +2,38 @@ import { Scene } from "phaser";
 import constants from "../constants";
 import CountDown from "./CountDownScene";
 
+var contador = 0;
+var punts = 0;
+var dianes = 0;
+var dianes_max = 10;
 
-const WIDTH = constants.mida_tile * constants.tiles[0];
-const HEIGHT = constants.mida_tile * constants.tiles[1];
+function recompensar(guanyador)
+{
+    let jugadores = constants.players.getChildren();
+    jugadores[guanyador].plom += constants.plom_recompensa;
+}
+
+function guanyador(puntuacio){
+    var guanyador = 0;
+    var punts = 9999;
+    for ( var i = 0;  i < 4; i++)
+    {
+
+        if (puntuacio[i] < punts)
+        {
+            guanyador = i;
+            punts = puntuacio[i];
+            console.log(punts);
+        }
+    }
+    return guanyador-1;
+}
 
 class Dona extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y) {
+    constructor(scene, x, y, vel) {
         super(scene, x, y, "dones_dona_corrent");
         this.scene = scene;
-        this.velocitat = Phaser.Math.Between(5, 7);
+        this.velocitat = vel;
         scene.add.existing(this);
 
         //Funcions
@@ -19,9 +42,9 @@ class Dona extends Phaser.GameObjects.Sprite {
 
 class Diana extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
-        super(scene, x, y, "llauna_dianes");
+        super(scene, x, y, "dones_diana");
         this.scene = scene;
-        this.velocitat = Phaser.Math.Between(5, 7);
+        this.desplegada = false;
         scene.add.existing(this);
 
         //Funcions
@@ -39,20 +62,27 @@ class Cursor extends Phaser.GameObjects.Sprite {
 
 export default class MinijocDones extends Scene {
 
+    init(data)
+    {
+        this.jugador = data[0];
+        this.torns = data[1];
+        this.puntuacions = data[2];
+    }
     constructor() {
         super({key: "MinijocDones"});
-        this.dones = [];
-        this.nDones = 0;
+        this.dona = undefined;
         this.dianes = [];
-        this.nDianes = 0;
+        this.dona_mini = undefined;
+        this.temps = 0;
+        this.temps_final = 0;
 
         //Funciones
-        this.crearDona = function (escena, x, y)
+        this.crearDona = function (escena, x, y, vel)
         {
-          var dona = new Dona(escena, x, y);
+          var dona = new Dona(escena, x, y, vel);
           dona.setInteractive().on('pointerdown',function(event)
           {
-            console.log("CLICKAT");
+            punts -= 4;
           });
           return dona;
         };
@@ -62,105 +92,209 @@ export default class MinijocDones extends Scene {
             let diana = new Diana(escena, x, y);
             diana.setInteractive().on('pointerdown',function(event)
             {
-                console.log("CLICKAT");
+                this.removeInteractive();
+                this.desplegada = false;
+                this.anims.playReverse("diana");
+                punts += 2;
+                dianes++;
+                console.log("Dianes" +dianes);
             });
             return diana;
         };
 
-        this.actualitzarDones = function()
-        {
-            var donesEliminar = [];
-            for (var i = 0; i < this.nDones; i++)
-            {
-                this.dones[i].x += this.dones[i].velocitat;
-                if (Phaser.Geom.Rectangle.Overlaps(this.scene.physics.world.bounds, this.dones[i].getBounds()))
-                {
-                    donesEliminar.push(this.dones[i]);
-                }
-            }
-            for (let j in donesEliminar)
-            {
-                j.destroy();
-                this.nDones--;
-            }
-        };
-        this.actualitzarDianes = function()
-        {
-            var dianesEliminar = [];
-            for (var i = 0; i < this.nDianes; i++)
-            {
-                this.nDianes[i].x += this.nDianes[i].velocitat;
-                if (Phaser.Geom.Rectangle.Overlaps(this.scene.physics.world.bounds, this.nDianes[i].getBounds()))
-                {
-                    donesEliminar.push(this.nDianes[i]);
-                }
-            }
-            for (var j in dianesEliminar)
-            {
-                j.destroy();
-                this.nDianes--;
-            }
-        }
     }
 
     create() {
-        /*
+
         constants.escena_pausada = "MinijocDones";
-        this.scene.add('CountDown', CountDown, true, {x: 400, y: 300});
+        this.scene.launch('CountDown');
         this.scene.pause();
 
         //Comencem el minijoc
         console.log("Starting MinijocDones ...");
-*/
-        //this.input.setDefaultCursor('url(@/game/assets/input/Cursor.cur)', pointer);
 
-        //this.input.mouse.requestPointerLock();
 
-        this.dianes.push(this.crearDiana(this, 100, 100));
-        this.dianes.push(this.crearDiana(this, 200, 100));
-        this.dianes.push(this.crearDiana(this, 300, 100));
-        this.dianes.push(this.crearDiana(this, 400, 100));
+        this.scene.bringToTop();
 
-        this.dones.push(this.crearDona(this, 100, 200));
-        this.dones.push(this.crearDona(this, 200, 200));
+        this.cridaDona = function()
+        {
+            timer_avis.reset({
+                delay: 500,
+                callback: this.avis,
+                callbackScope: this,
+                repeat: -1
+            });
+            console.log("timer_dona activat");
+        };
+
+        this.avis = function () {
+            console.log("timer_dona");
+            if (contador === 6)
+            {
+                this.dona = this.crearDona(this, 0, 700, Phaser.Math.Between(5, 7));
+                this.dona.play("anim_dona");
+                this.dona.setScale(2);
+                timer_avis.reset({
+                    delay: 500,
+                    callback: this.avis,
+                    callbackScope: this,
+                    repeat: -1,
+                    paused: true
+                });
+                contador = 0;
+                this.dona_mini.visible = false;
+                timer_dona = this.time.addEvent({
+                    delay: 8000,
+                    callback: this.cridaDona,
+                    callbackScope: this,
+                    repeat: 0
+                });
+            }
+            else
+            {
+                contador++;
+                this.dona_mini.visible = this.dona_mini.visible === false;
+            }
+            console.log(contador);
+        };
+
+        this.onEvent = function()
+        {
+            console.log("onEvent: " + this.dianes);
+            let diana = Phaser.Math.RND.between(0, 5);
+            if (this.dianes[diana].desplegada)
+            {
+                this.dianes[diana].removeInteractive();
+                this.dianes[diana].desplegada = false;
+                this.dianes[diana].anims.playReverse("diana");
+            }
+            else
+            {
+                this.dianes[diana].setInteractive();
+                this.dianes[diana].desplegada = true;
+                this.dianes[diana].play("diana");
+            }
+
+        };
+
+        let background = this.add.image(0, 0, "dones_fons"); //Background
+        background.setOrigin(0, 0);
+
+        this.dianes.push(this.crearDiana(this, 20, 360).setOrigin(0, 0.5));
+        this.dianes.push(this.crearDiana(this, 228, 318).setOrigin(0, 0.5));
+        this.dianes.push(this.crearDiana(this, 366, 279).setOrigin(0, 0.5));
+        this.dianes.push(this.crearDiana(this, 786, 263).setOrigin(1, 0.5));
+        this.dianes.push(this.crearDiana(this, 879, 297).setOrigin(1, 0.5));
+        this.dianes.push(this.crearDiana(this, 1080, 350).setOrigin(1, 0.5));
+
+        this.dianes[0].setFlipX(true);
+        this.dianes[1].setFlipX(true);
+        this.dianes[2].setFlipX(true);
+
+        this.dianes[1].setScale(0.75);
+        this.dianes[2].setScale(0.5);
+        this.dianes[3].setScale(0.5);
+        this.dianes[4].setScale(0.75);
+
+        this.dianes[0].on('pointerup', function () {
+            this.removeInteractive();
+            this.desplegada = false;
+            this.anims.playReverse("diana");
+        });
+
+        this.dona = new Dona(this, 0, 700, 0);
 
         this.cursor = this.add.image(0,0, "dones_cursor");
         this.children.add(this.cursor);
-
-        var prova = this.add.sprite(500, 500, "dones_dona_corrent");
+        this.cursor.setDepth(1);
 
         this.anims.create({
             key: "anim_dona",
             frames: this.anims.generateFrameNumbers("dones_dona_corrent"),
-            frameRate: 1,
+            frameRate: 6,
             repeat:-1
         });
+        this.anims.create({
+            key: "diana",
+            frames: this.anims.generateFrameNumbers("dones_diana"),
+            frameRate: 12,
+            repeat:0,
+        });
 
-        prova.play("anim_dona");
-        this.dones[0].play("anim_dona");
-        //let background = this.add.image(0, 0, "paisatge_dianes"); //Background
-        //background.setOrigin(0, 0);
+        this.dona_mini = this.add.sprite(700, 100, "dones_dona_corrent");
+        this.dona_mini.setScale(0.3);
+        this.dona_mini.visible = false;
 
-        //let foreground = this.add.image(WIDTH / 2, HEIGHT-80, "barra_dianes"); //Foreground
+        var timer = this.time.addEvent({
+            delay: 700,
+            callback: this.onEvent,
+            callbackScope: this,
+            repeat: -1
+        });
 
+        var timer_dona = this.time.addEvent({
+            delay: 8000,
+            callback: this.cridaDona,
+            callbackScope: this,
+            repeat: 0
+        });
 
-
+        var timer_avis = this.time.addEvent( {
+            delay: 500,
+            callback: this.avis,
+            callbackScope: this,
+            repeat: -1,
+            paused: true
+        });
     }
 
-    update()
+    update(time)
     {
         this.cursor.x = this.input.x;
         this.cursor.y = this.input.y;
 
-        this.actualitzarDianes();
-        this.actualitzarDones();
+        if (this.temps < 10)
+        {
+            this.temps = time;
+            console.log("Temps actualitzat");
+        }
+
+        //console.log("Jugadors " + this.jugador);
+        //console.log("Torns " + this.torns);
+
+        if (!acabat())
+        {
+            this.dona.x += this.dona.velocitat;
+        }
+        else {
+            this.temps_final = time;
+            this.puntuacions[this.jugador] = Math.floor(this.temps_final-this.temps);
+            this.scene.stop();
+
+            if (this.jugador < this.torns)
+            {
+                dianes = 0;
+                this.jugador++;
+                this.dianes = [];
+                this.scene.start('MinijocDones',[this.jugador, this.torns, this.puntuacions]);
+            }
+            else
+            {
+                recompensar(guanyador(this.puntuacions));
+                console.log("Tornem a l'escena");
+            }
+        }
     }
 }
-function onEvent() {
 
+
+function clickat(diana){
+    diana.removeInteractive();
+    diana.desplegada = false;
+    //diana.anims.playReverse("diana");
 }
 
-function clickat (event, objecte){
-    console.log("Clickat");
-
+function acabat()
+{
+    return (dianes === dianes_max);
 }

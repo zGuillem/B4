@@ -9,34 +9,14 @@ const HEIGHT = constants.mida_tile * constants.tiles[1];
 
 function recompensar(guanyador)
 {
-
     let jugadores = constants.players.getChildren();
-    //console.log(jugadores);
     jugadores[guanyador].plom += constants.plom_recompensa;
-    //console.log(jugadores[guanyador].plom);
-
-    //constants.players.clear();
-
-    for (let i = 0; i < 4; i++)
-    {
-        //constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
-        //constants.players.add(new Personaje(constants.playScene, jugadores[i].x, jugadores[i].y, 'player', jugadores[i].torn, jugadores[i].vides, jugadores[i].plom, jugadores[i].municio));
-    }
-    /*
-    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
-    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
-    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
-    constants.players.add(new Personaje(this, constants.INIT_X + 200, constants.INIT_Y + 300, 'player', 1, 3, 2, 0));
-    */
-    //console.log(constants.players.getChildren());
-    //constants.players = jugadors;
-
 }
 
 function guanyador(puntuacio){
     var guanyador = 0;
     var punts = 9999;
-    for ( var i = 1;  i < 5; i++)
+    for ( var i = 0;  i < 4; i++)
     {
 
         if (puntuacio[i] < punts)
@@ -48,7 +28,7 @@ function guanyador(puntuacio){
     }
     //console.log(puntuacio);
     //console.log(guanyador);
-    return guanyador;
+    return guanyador-1;
 }
 
 class Llauna extends Phaser.GameObjects.Sprite {
@@ -169,7 +149,7 @@ export default class MinijocDianes extends Scene {
         //this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
         this.scene.launch('CountDown');
         this.scene.pause();
-        this.temps = 0;
+
     }
 
 
@@ -227,7 +207,6 @@ export default class MinijocDianes extends Scene {
             console.log(this.temps_final-this.temps);
 
             this.puntuacions[this.jugador] = Math.floor(this.temps_final-this.temps);
-            constants.estat = "lliure";
             this.scene.stop();
             if (this.jugador < this.torns)
             {
@@ -239,7 +218,6 @@ export default class MinijocDianes extends Scene {
                 recompensar(guanyador(this.puntuacions));
                 console.log("Tornem a l'escena");
             }
-            recompensar(guanyador(this.puntuacions));
         }
     }
 }

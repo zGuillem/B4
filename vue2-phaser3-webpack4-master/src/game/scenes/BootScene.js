@@ -51,9 +51,7 @@ import beure_jugador1 from '@/game/assets/beure_jugador1.png';
 import beure_jugador2 from '@/game/assets/beure_jugador2.png';
 import beure_jugador3 from '@/game/assets/beure_jugador3.png';
 import beure_jugador4 from '@/game/assets/beure_jugador4.png';
-import beure_j1_cara from '@/game/assets/minijoc_beure_cara.png';
 import taberna_minijoc from '@/game/assets/taberna_minijoc_beure.png';
-import taberna_barra from '@/game/assets/barra_taberna.png';
 import ready_go from '@/game/assets/ready_go.png';
 import beure_particules_1 from  '@/game/assets/beber_particulas_nivel_embriaguez_1.png';
 import beure_particules_2 from  '@/game/assets/beber_particulas_nivel_embriaguez_2.png';
@@ -64,8 +62,14 @@ import barra_dianes from '@/game/assets/Taula_dianes.png';
 import llauna from '@/game/assets/llauna.png';
 
 //Dones
-import dona_corrent from '@/game/assets/minijoc_dones_dona.png'
+import dona_corrent from '@/game/assets/sprites_mujer_caminando.png'
 import dones_cursor from '@/game/assets/minijoc_dones_cursor.png'
+import mujeres_espacio from '@/game/assets/mujeres_espacio.png'
+import dones_diana from '@/game/assets/dones_diana.png'
+
+
+
+
 
 //General
 import nombres from '@/game/assets/sprite_numeros_grandes.png'
@@ -165,7 +169,6 @@ export default class BootScene extends Scene {
             frameWidth: 120,
             frameHeight: 120
         });
-        this.load.image('barra', taberna_barra);
         this.load.image('taberna_beure', taberna_minijoc);
 
 
@@ -176,10 +179,15 @@ export default class BootScene extends Scene {
 
         //Dones
         this.load.spritesheet('dones_dona_corrent', dona_corrent, {
-            frameWidth: 100,
-            frameHeight: 100
+            frameWidth: 640,
+            frameHeight: 640
+        });
+        this.load.spritesheet('dones_diana', dones_diana, {
+            frameWidth: 79,
+            frameHeight: 79
         });
         this.load.image('dones_cursor', dones_cursor);
+        this.load.image('dones_fons', mujeres_espacio);
 
         //CountDown
         this.load.spritesheet('ReadyGo', ready_go, {
@@ -194,6 +202,6 @@ export default class BootScene extends Scene {
     }
 
     create() {
-        this.scene.start('MinijocDones');
+        this.scene.start('MainScene', [1, 4, []]);
     }
 }

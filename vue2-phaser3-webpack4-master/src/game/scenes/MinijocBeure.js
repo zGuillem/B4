@@ -1,10 +1,36 @@
 import { Scene } from "phaser";
 import constants from "../constants";
 import CountDown from "./CountDownScene";
-const WIDTH = constants.mida_tile * constants.tiles[0];
-const HEIGHT = constants.mida_tile * constants.tiles[1];
+
+var acabat = false;
+var comptador = 1;
+
 
 const JUGADOR_SPRITE = [, "beure_jugador1","beure_jugador2", "beure_jugador3", "beure_jugador4"];
+
+
+function recompensar(guanyador)
+{
+    let jugadores = constants.players.getChildren();
+    jugadores[guanyador].plom += constants.plom_recompensa;
+}
+
+function guanyador(puntuacio){
+    var guanyador = 0;
+    var punts = 0;
+    for ( var i = 0;  i < 4; i++)
+    {
+        if (puntuacio[i] > punts)
+        {
+            guanyador = i;
+            punts = puntuacio[i];
+            console.log(punts);
+        }
+    }
+    //console.log(puntuacio);
+    console.log(guanyador);
+    return guanyador-1;
+}
 
 class Personaje extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, sprite) {
@@ -23,7 +49,15 @@ class Personaje extends Phaser.GameObjects.Sprite {
 }
 
 export default class MinijocBeure extends Scene {
-  constructor() {
+
+    init (data)
+    {
+        this.jugador = data[0];
+        this.torns = data[1];
+        this.puntuacions = data[2];
+    }
+
+    constructor() {
     super({ key: "MinijocBeure" });
     //Creem en ordre els objectes del escenari
     let personatge1;
@@ -34,6 +68,8 @@ export default class MinijocBeure extends Scene {
 
   create() {
 
+      this.scene.bringToTop();
+
     //Comencem el minijoc
     console.log("Starting MinijocBeure ...");
 
@@ -42,7 +78,7 @@ export default class MinijocBeure extends Scene {
         if (!this.personatge1.coma) {
           this.personatge1.actual += this.personatge1.alcohol;
           this.personatge1.setFrame(this.personatge1.frame_actual + 1);
-          console.log(this.personatge1.actual + 1);
+          //console.log(this.personatge1.actual + 1);
         }
       },this);
 
@@ -50,7 +86,7 @@ export default class MinijocBeure extends Scene {
           if (!this.personatge1.coma)
           {
             this.personatge1.setFrame(this.personatge1.frame_actual);
-            console.log(this.personatge1.actual);
+            //console.log(this.personatge1.actual);
           }
           },this);
 
@@ -59,7 +95,7 @@ export default class MinijocBeure extends Scene {
         if (!this.personatge2.coma) {
             this.personatge2.actual += this.personatge2.alcohol;
             this.personatge2.setFrame(this.personatge2.frame_actual + 1);
-            console.log(this.personatge2.actual + 1);
+            //console.log(this.personatge2.actual + 1);
           }
         },this);
 
@@ -67,18 +103,18 @@ export default class MinijocBeure extends Scene {
           if (!this.personatge2.coma)
           {
             this.personatge2.setFrame(this.personatge2.frame_actual);
-            console.log(this.personatge2.actual);
+            //console.log(this.personatge2.actual);
           }
         }, this);
 
     let background = this.add.image(-100, 0, "taberna_beure"); //Background
     background.setOrigin(0, 0);
 
-    this.personatge2 = new Personaje(this, 700, 371, 2);
-    this.personatge1 = new Personaje(this, 600, 371, 1);
+    //this.personatge2 = new Personaje(this, 700, 371, 2);
+    this.personatge1 = new Personaje(this, 600, 371, this.jugador);
 
     constants.escena_pausada = "MinijocBeure";
-    this.scene.add('CountDown', CountDown, true, { x: 400, y: 300 });
+    this.scene.launch('CountDown');
     this.scene.pause();
 
     this.timer_nombres = this.add.sprite(900, 200, "nombres", 5);
@@ -115,22 +151,51 @@ export default class MinijocBeure extends Scene {
     //Modifiquem la posicio del personatge1 i el seu frame durant un click de ratoli
   }
 
-  update(time) {
-    comparar_personatge(this.personatge1);
-    comparar_personatge(this.personatge2);
+  update() {
+      if (!acabat)
+      {
+          comparar_personatge(this.personatge1);
+          //comparar_personatge(this.personatge2);
+      }
+      else
+      {
+
+          if (this.personatge1.coma)
+          {
+              this.puntuacions[this.jugador] = 0;
+          }
+          else {
+              this.puntuacions[this.jugador] = this.personatge1.actual;
+          }
+
+          console.log(this.puntuacions[this.jugador]);
+          this.scene.stop();
+          if (this.jugador < this.torns)
+          {
+              acabat = false;
+              comptador = 1;
+              this.jugador++;
+              this.input.keyboard.removeKey("space");
+              this.input.keyboard.removeKey("enter");
+              this.scene.start('MinijocBeure',[this.jugador, this.torns, this.puntuacions]);
+          }
+          else
+          {
+              recompensar(guanyador(this.puntuacions));
+          }
+      }
   }
 }
 
-var comptador = 1;
 
 function onEvent() {
   this.timer_nombres.setFrame(5-comptador);
   this.timer_nombres.setTint(Math.random()  *0xffffff);
   if (comptador < 5) {
-    console.log(comptador);
+    //console.log(comptador);
     comptador += 1;
   } else {
-    this.scene.pause();
+    acabat = true;
   }
 }
 
