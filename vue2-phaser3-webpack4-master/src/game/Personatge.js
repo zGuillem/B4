@@ -3,9 +3,9 @@ class Personaje extends Phaser.GameObjects.Sprite {
         super(scene, x, y, imatge);
         scene.add.existing(this);
         this.torn = torn;
-        this.vides = vides;
-        this.plom = plom;
-        this.municio = municio;
+        this.vides = 3;
+        this.plom = 0;
+        this.municio = 4;
         this.teArma = true;
         this.teEscut = false;
         this.estaRefugiat = false;
@@ -14,6 +14,7 @@ class Personaje extends Phaser.GameObjects.Sprite {
         this.haMogut = false;
         this.haDisparat = false;
         this.haRobat = false;
+        this.objectiu = "";
     }
 
     nouTorn() {

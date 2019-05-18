@@ -12,7 +12,8 @@ export default class ForjaScene extends Scene {
 
         let jugador = constants.players.getChildren()[constants.ronda%4];
         //imatge de fons
-        this.add.image(600, 441, 'fondoForja');
+        this.add.image(0, 0, 'fondoForja').setOrigin(0,0);
+
         let that = this;
         let numMunicio = 1; // quantitat de munició que vol forjar el jugador
         this.textNumMunicio; //text de la quantitat de munició mostrat per pantalla

@@ -28,7 +28,7 @@ function guanyador(puntuacio){
     }
     //console.log(puntuacio);
     //console.log(guanyador);
-    return guanyador-1;
+    return guanyador;
 }
 
 class Llauna extends Phaser.GameObjects.Sprite {
@@ -112,22 +112,23 @@ export default class MinijocDianes extends Scene {
         background.setOrigin(0, 0);
 
         this.llaunes = [
-            new Llauna(escena, 300, HEIGHT-196),
-            new Llauna(escena, 430, HEIGHT-196),
-            new Llauna(escena, 570, HEIGHT-196),
-            new Llauna(escena, 700, HEIGHT-196)
+            new Llauna(escena, 400, 723).setScale(1.5),
+            new Llauna(escena, 600, 723).setScale(1.5),
+            new Llauna(escena, 800, 723).setScale(1.5),
+            new Llauna(escena, 1000, 723).setScale(1.5),
         ];
 
 
-        let foreground = this.add.image(WIDTH / 2, HEIGHT-80, "barra_dianes"); //Foreground
+        let foreground = this.add.image(700, 900, "barra_dianes"); //Foreground
+        foreground.setScale(1.5);
 
-        this.detector = new Detector(this,400, HEIGHT-196);
+        this.detector = new Detector(this,400, 760);
         this.detector.visible = false;
 
 
-        var punts = this.calcular_punts_linia(WIDTH / 2, HEIGHT, this.detector.x, this.detector.y,  150);
+        var punts = this.calcular_punts_linia(700, 1000, this.detector.x, this.detector.y,  250);
 
-        this.linia = new Phaser.Geom.Line(WIDTH / 2, HEIGHT, punts[0], punts[1]);
+        this.linia = new Phaser.Geom.Line(700, 1000, punts[0], punts[1]);
 
         graphics = this.add.graphics({ lineStyle: { width: 6, color: 0xaa00aa } });
 
@@ -174,16 +175,16 @@ export default class MinijocDianes extends Scene {
         {
             this.detector.x += this.detector.velocitat * this.detector.direccio;
 
-            if (this.detector.x < 280 || this.detector.x > 720)
+            if (this.detector.x < 300 || this.detector.x > 1100)
             {
                 this.detector.direccio *= -1;
-                if (this.detector.x < 280)
+                if (this.detector.x < 300)
                 {
-                    this.detector.x = 280;
+                    this.detector.x = 300;
                 }
                 else
                 {
-                    this.detector.x = 720;
+                    this.detector.x = 1100;
                 }
 
                 if (this.detector.velocitat - this.detector.velReduccio >= this.detector.velMin)
@@ -192,7 +193,7 @@ export default class MinijocDianes extends Scene {
                 }
             }
 
-            var punts = this.calcular_punts_linia(this.linia.x1, this.linia.y1, this.detector.x, this.detector.y,  150);
+            var punts = this.calcular_punts_linia(this.linia.x1, this.linia.y1, this.detector.x, this.detector.y,  250);
 
             this.linia.setTo(this.linia.x1, this.linia.y1, punts[0], punts[1]);
             graphics.clear();

@@ -26,7 +26,7 @@ function guanyador(puntuacio){
             console.log(punts);
         }
     }
-    return guanyador-1;
+    return guanyador;
 }
 
 class Dona extends Phaser.GameObjects.Sprite {
@@ -180,12 +180,12 @@ export default class MinijocDones extends Scene {
         let background = this.add.image(0, 0, "dones_fons"); //Background
         background.setOrigin(0, 0);
 
-        this.dianes.push(this.crearDiana(this, 20, 360).setOrigin(0, 0.5));
-        this.dianes.push(this.crearDiana(this, 228, 318).setOrigin(0, 0.5));
-        this.dianes.push(this.crearDiana(this, 366, 279).setOrigin(0, 0.5));
-        this.dianes.push(this.crearDiana(this, 786, 263).setOrigin(1, 0.5));
-        this.dianes.push(this.crearDiana(this, 879, 297).setOrigin(1, 0.5));
-        this.dianes.push(this.crearDiana(this, 1080, 350).setOrigin(1, 0.5));
+        this.dianes.push(this.crearDiana(this, 24, 515).setOrigin(0, 0.5));
+        this.dianes.push(this.crearDiana(this, 280, 420).setOrigin(0, 0.5));
+        this.dianes.push(this.crearDiana(this, 445, 360).setOrigin(0, 0.5));
+        this.dianes.push(this.crearDiana(this, 955, 355).setOrigin(1, 0.5));
+        this.dianes.push(this.crearDiana(this, 1070, 425).setOrigin(1, 0.5));
+        this.dianes.push(this.crearDiana(this, 1315, 510).setOrigin(1, 0.5));
 
         this.dianes[0].setFlipX(true);
         this.dianes[1].setFlipX(true);
@@ -253,6 +253,9 @@ export default class MinijocDones extends Scene {
         this.cursor.x = this.input.x;
         this.cursor.y = this.input.y;
 
+        console.log("X: " + this.input.x);
+        console.log("Y: " + this.input.y);
+
         if (this.temps < 10)
         {
             this.temps = time;
@@ -268,7 +271,7 @@ export default class MinijocDones extends Scene {
         }
         else {
             this.temps_final = time;
-            this.puntuacions[this.jugador] = Math.floor(this.temps_final-this.temps);
+            this.puntuacions[this.jugador] = Math.floor(this.temps_final-this.temps - punts);
             this.scene.stop();
 
             if (this.jugador < this.torns)

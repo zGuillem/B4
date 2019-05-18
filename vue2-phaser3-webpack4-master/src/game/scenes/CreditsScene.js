@@ -10,6 +10,8 @@ export default class CreditsScene extends Scene {
         console.log("Starting CreditsScene ...");
         var that = this;
 
+        this.add.image(0,0, 'fondo_menu').setOrigin(0,0);
+
         // Botón menú
         var butoMenu = this.add.image(210, 800, 'botonMenu').setInteractive();
         butoMenu.on('pointerup', function () {

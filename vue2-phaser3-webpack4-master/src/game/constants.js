@@ -5,8 +5,8 @@ export default {
     BARALLA: [0],
     MIDA_TILE: 48,
     TILES: [21, 15],
-    INIT_X: 290, //posició x de la primera casella del taulell
-    INIT_Y: 60, //posició y de la primera casella del taulell
+    INIT_X: 200, //posició x de la primera casella del taulell
+    INIT_Y: 180, //posició y de la primera casella del taulell
     MIDATAULELL: 6, //nombre de files i columnes del taulell menys una
     MIDACASELLA: 100, // dimensions de cada casella
     preu_arma: 5, // preu de l'arma bàsica

@@ -11,20 +11,22 @@ export default class MainScene extends Scene {
         console.log("Starting MainScene ...");
         var that = this;
 
+        this.add.image(0,0, 'fondo_menu').setOrigin(0,0);
+
         //Botón start
-        var butoStart = this.add.image(540, 200, 'botonStart').setInteractive();
+        var butoStart = this.add.image(700, 200, 'botonStart').setInteractive();
         butoStart.on('pointerup', function () {
             that.scene.start('PlayScene');
         });
 
         //Botón instrucciones
-        var butoManual = this.add.image(540, 360, 'botonManual').setInteractive();
+        var butoManual = this.add.image(700, 360, 'botonManual').setInteractive();
         butoManual.on('pointerup', function () {
            that.scene.start('ManualScene');
         });
 
         //Botón créditos
-        var butoCredits = this.add.image(540, 680, 'botonCreditos').setInteractive();
+        var butoCredits = this.add.image(700, 680, 'botonCreditos').setInteractive();
         butoCredits.on('pointerup', function() {
             that.scene.start('CreditsScene');
         });

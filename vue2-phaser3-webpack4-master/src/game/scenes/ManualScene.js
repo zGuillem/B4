@@ -59,6 +59,8 @@ export default class ManualScene extends Scene {
         var that = this;
         page = 0;
 
+        this.add.image(0,0, 'fondo_menu').setOrigin(0,0);
+
         cambiarFoto(that, page);
 
         // Botón menú

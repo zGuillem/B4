@@ -29,13 +29,13 @@ function guanyador(puntuacio){
     }
     //console.log(puntuacio);
     console.log(guanyador);
-    return guanyador-1;
+    return guanyador;
 }
 
 class Personaje extends Phaser.GameObjects.Sprite {
   constructor(scene, x, y, sprite) {
     super(scene, x, y, JUGADOR_SPRITE[sprite]);
-    this.particules = scene.add.sprite(x-70, y-40, "beure_particules1");
+    this.particules = scene.add.sprite(x-80, y-100, "beure_particules1");
     this.particules.setDepth(1);
     this.particules.visible = false;
     this.actual = 0;
@@ -107,17 +107,18 @@ export default class MinijocBeure extends Scene {
           }
         }, this);
 
-    let background = this.add.image(-100, 0, "taberna_beure"); //Background
+    let background = this.add.image(0, 0, "taberna_beure"); //Background
     background.setOrigin(0, 0);
 
     //this.personatge2 = new Personaje(this, 700, 371, 2);
-    this.personatge1 = new Personaje(this, 600, 371, this.jugador);
+    this.personatge1 = new Personaje(this, 830, 500, this.jugador);
+    this.personatge1.setScale(1.5);
 
     constants.escena_pausada = "MinijocBeure";
     this.scene.launch('CountDown');
     this.scene.pause();
 
-    this.timer_nombres = this.add.sprite(900, 200, "nombres", 5);
+    this.timer_nombres = this.add.sprite(1300, 200, "nombres", 5);
     this.children.add(this.timer_nombres);
 
 
@@ -145,6 +146,7 @@ export default class MinijocBeure extends Scene {
     });
 
     this.personatge1.particules.play("anim_particules1");
+      this.personatge1.particules.setScale(1.5);
 
    //this.add.image(0, 0, 'beure_j1_cara', '__BASE').setOrigin(0);
 
@@ -152,6 +154,7 @@ export default class MinijocBeure extends Scene {
   }
 
   update() {
+
       if (!acabat)
       {
           comparar_personatge(this.personatge1);
@@ -227,12 +230,15 @@ function canviarParticules(personatge)
   if(personatge.frame_actual === 4 && personatge.frame_anterior === 2 ) {
     personatge.particules.setTexture("beure_particules2");
     personatge.particules.play("anim_particules2");
+      personatge.particules.setScale(1.5);
   }
   else if(personatge.frame_actual === 2 && personatge.frame_anterior === 4 ) {
     personatge.particules.setTexture("beure_particules1");
     personatge.particules.play("anim_particules1");
+      personatge.particules.setScale(1.5);
   }
   else if(personatge.frame_actual === 0 && personatge.frame_anterior === 2 ) {
     personatge.particules.play("anim_particules1");
+      personatge.particules.setScale(1.5);
   }
 }

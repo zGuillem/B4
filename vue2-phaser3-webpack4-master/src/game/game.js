@@ -10,15 +10,15 @@ import MainScene from './scenes/MainScene'
 import CreditsScene from "./scenes/CreditsScene";
 import ManualScene from "./scenes/ManualScene";
 import ForjaScene from "./scenes/ForjaScene";
-import HudScene from "./scenes/HudScene";
 import CardsScene from "./scenes/CardsScene";
-
+import MercaderScene from "./scenes/MercaderScene";
+import HudScene from "./scenes/HudScene";
 
 function launch() {
     new Phaser.Game({
         type: Phaser.AUTO,
-        width: 1200,
-        height: 882,
+        width: 1400,
+        height: 1000,
         parent: 'game-container',
         physics: {
             default: 'arcade',
@@ -28,7 +28,7 @@ function launch() {
             }
         },
         scene: [BootScene, PlayScene, MinijocBeure, CountDown, MinijocDianes, MinijocDones,
-                MainScene, CreditsScene, ManualScene, ForjaScene, HudScene, CardsScene]
+                MainScene, CreditsScene, ManualScene, ForjaScene, HudScene, CardsScene, MercaderScene]
     })
 }
 

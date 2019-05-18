@@ -94,7 +94,7 @@ export default class CardsScene extends Scene {
         jugador = constants.players.getChildren()[constants.ronda%4];
 
         // Taula
-        this.add.image(600, 700, 'mesa');
+        this.add.image(700, 580, 'mesa');
 
         //Butó per a tornar a la pantalla de joc
         let butoMenu = this.add.image(130, 760, 'botonMenu').setInteractive();
